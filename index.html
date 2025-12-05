@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SalTaz - v86 Linux Emulator</title>
+    <title>SliTaz - v86 Linux Emulator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <h1 class="logo">SalTaz</h1>
+                <h1 class="logo">SliTaz</h1>
                 <span class="version">v86 Linux Emulator</span>
             </div>
             <div class="header-right">
@@ -75,16 +75,30 @@
                 <div class="controls-panel">
                     <h3>Quick Actions</h3>
                     <button id="mouse-lock-btn" class="action-btn" disabled>
-                        <span>🖱️ Lock Mouse</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a7 7 0 0 0-7 7v4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V9a7 7 0 0 0-7-7z"></path>
+                        </svg>
+                        <span>Lock Mouse</span>
                     </button>
                     <button id="fullscreen-btn" class="action-btn">
-                        <span>⛶ Fullscreen</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                        <span>Fullscreen</span>
                     </button>
                     <button id="screenshot-btn" class="action-btn" disabled>
-                        <span>📷 Screenshot</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        <span>Screenshot</span>
                     </button>
                     <button id="reset-btn" class="action-btn danger" disabled>
-                        <span>🔄 Reset</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                        <span>Reset</span>
                     </button>
                 </div>
             </aside>
@@ -94,7 +108,7 @@
                 <div id="loading-screen" class="loading-screen">
                     <div class="loading-content">
                         <div class="spinner"></div>
-                        <h2>Loading SalTaz Emulator</h2>
+                        <h2>Loading SliTaz Emulator</h2>
                         <p id="loading-status">Initializing v86...</p>
                         <div class="progress-bar">
                             <div id="progress-fill" class="progress-fill"></div>
@@ -221,6 +235,29 @@
                             <div class="metric-value" id="metric-network">0 KB/s</div>
                             <canvas id="network-chart" width="200" height="100"></canvas>
                         </div>
+                        <div class="metric-card">
+                            <h4>Disk I/O</h4>
+                            <div class="metric-value" id="metric-disk">0 KB/s</div>
+                            <canvas id="disk-chart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Network Packets</h4>
+                            <div class="metric-value" id="metric-packets">0 pkt/s</div>
+                            <canvas id="packets-chart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Uptime</h4>
+                            <div class="metric-value" id="metric-uptime">00:00:00</div>
+                            <div class="metric-detail">Running for <span id="uptime-detail">0 seconds</span></div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Emulator State</h4>
+                            <div class="metric-value" id="metric-state">Stopped</div>
+                            <div class="metric-detail">
+                                <div>Boot time: <span id="boot-time">N/A</span></div>
+                                <div>Instructions: <span id="instructions-count">0</span></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="log-viewer">
                         <h3>Event Log</h3>
@@ -249,6 +286,12 @@
         Note: Using @latest for v86. For production, consider pinning to a specific version.
         Example: https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js
         See DEPLOYMENT.md for self-hosting instructions.
+        
+        If v86 fails to load (blocked by ad blockers), the app will run in demo mode.
+        To test with actual SliTaz 4.0:
+        1. Disable ad blockers/content blockers for this site
+        2. Or download v86 library locally and update script src
+        3. The ISO is configured to: https://download.tuxfamily.org/slitaz/iso/4.0/slitaz-4.0.iso
     -->
     <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js" onerror="console.warn('v86 library not available, using demo mode')"></script>
     <script src="emulator.js"></script>

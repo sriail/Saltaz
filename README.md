@@ -1,11 +1,12 @@
-# SalTaz - v86 Linux Emulator
+# SliTaz - v86 Linux Emulator
 
-A modern, lightweight browser-based Linux emulator powered by v86, providing a seamless experience for running SalTaz 4.0 (based on SliTaz) directly in your web browser.
+A modern, lightweight browser-based Linux emulator powered by v86, providing a seamless experience for running SliTaz 4.0 (core edition with Midori browser) directly in your web browser.
 
 ## Features
 
 ### Core Functionality
 - ✅ **Browser-based Emulation**: Runs entirely in the browser using v86 and WebAssembly
+- ✅ **SliTaz 4.0 Core**: Pre-configured with SliTaz 4.0 ISO featuring Midori browser
 - ✅ **Terminal Support**: Full terminal access for command-line operations
 - ✅ **Pre-installed Applications**: Browser (Midori), Notepad, Settings, and base utilities
 - ✅ **Network Routing**: All traffic routes through the host device (no external proxies)
@@ -13,7 +14,7 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 
 ### User Experience
 - ✅ **Mouse Lock & Integration**: Seamless mouse capture with pointer lock API
-- ✅ **Modern UI**: Clean, simplistic interface that complements SliTaz aesthetics
+- ✅ **Modern UI**: Clean, simplistic interface with SVG icons that complements SliTaz aesthetics
 - ✅ **Light/Dark Mode**: Automatic theme syncing with browser preferences
 - ✅ **Fullscreen Support**: Immersive full-screen mode
 - ✅ **Keyboard Shortcuts**: Quick access to common functions
@@ -21,7 +22,7 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 ### Performance & Monitoring
 - ✅ **Resource Allocation**: Configurable memory and VGA memory settings
 - ✅ **Performance Settings**: Adjustable CPU speed and ACPI configuration
-- ✅ **Metrics Dashboard**: Real-time CPU, memory, FPS, and network monitoring
+- ✅ **Enhanced Metrics Dashboard**: Real-time CPU, memory, FPS, network I/O, disk I/O, network packets, uptime, and emulator state monitoring
 - ✅ **Low Latency**: Optimized for rapid input forwarding and minimal lag
 - ✅ **Backend Console**: Viewable system logs and serial output
 
@@ -126,6 +127,10 @@ Access via the metrics icon in the header to view:
 - **Memory Usage**: RAM consumption tracking
 - **Frame Rate**: FPS monitoring for performance
 - **Network I/O**: Data transfer rates
+- **Disk I/O**: Disk read/write speeds
+- **Network Packets**: Packets per second
+- **Uptime**: System running time
+- **Emulator State**: Current state, boot time, and instructions count
 
 ### Export Options
 
@@ -208,7 +213,7 @@ This project is open source and available under the MIT License.
 
 - [v86](https://github.com/copy/v86) - The x86 virtualization engine
 - [SliTaz](http://www.slitaz.org/) - The base Linux distribution
-- All contributors and users of the SalTaz project
+- All contributors and users of the SliTaz project
 
 ## Support
 
