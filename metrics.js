@@ -5,7 +5,9 @@ class MetricsCollector {
             cpu: [],
             memory: [],
             fps: [],
-            network: []
+            network: [],
+            disk: [],
+            packets: []
         };
         this.maxDataPoints = 60; // Keep last 60 data points
         this.isRunning = false;
@@ -14,7 +16,10 @@ class MetricsCollector {
             cpu: 0,
             memory: 0,
             fps: 0,
-            network: 0
+            network: 0,
+            disk: 0,
+            packets: 0,
+            uptime: 0
         };
         this.lastNetworkBytes = 0;
         this.fpsCounter = 0;
@@ -73,11 +78,28 @@ class MetricsCollector {
         this.metrics.network.push(networkIO);
         this.currentStats.network = networkIO;
 
+        // Simulate disk I/O
+        const diskIO = this.estimateDiskIO();
+        this.metrics.disk.push(diskIO);
+        this.currentStats.disk = diskIO;
+
+        // Simulate network packets
+        const packets = this.estimatePackets();
+        this.metrics.packets.push(packets);
+        this.currentStats.packets = packets;
+
+        // Update uptime
+        if (emulator && emulator.startTime) {
+            this.currentStats.uptime = Math.floor((Date.now() - emulator.startTime) / 1000);
+        }
+
         // Keep only recent data points
         if (this.metrics.cpu.length > this.maxDataPoints) {
             this.metrics.cpu.shift();
             this.metrics.memory.shift();
             this.metrics.network.shift();
+            this.metrics.disk.shift();
+            this.metrics.packets.shift();
         }
 
         // Log to event log
@@ -109,6 +131,20 @@ class MetricsCollector {
         if (!emulator || !emulator.isRunning) return 0;
         
         return Math.random() * 100;
+    }
+
+    estimateDiskIO() {
+        // Simulate disk I/O in KB/s
+        if (!emulator || !emulator.isRunning) return 0;
+        
+        return Math.random() * 50;
+    }
+
+    estimatePackets() {
+        // Simulate network packets per second
+        if (!emulator || !emulator.isRunning) return 0;
+        
+        return Math.floor(Math.random() * 200);
     }
 
     updateFPS() {
@@ -178,6 +214,53 @@ class MetricsCollector {
             metricNetwork.textContent = Math.round(this.currentStats.network) + ' KB/s';
         }
 
+        const metricDisk = document.getElementById('metric-disk');
+        if (metricDisk) {
+            metricDisk.textContent = Math.round(this.currentStats.disk) + ' KB/s';
+        }
+
+        const metricPackets = document.getElementById('metric-packets');
+        if (metricPackets) {
+            metricPackets.textContent = Math.round(this.currentStats.packets) + ' pkt/s';
+        }
+
+        // Update uptime
+        const metricUptime = document.getElementById('metric-uptime');
+        const uptimeDetail = document.getElementById('uptime-detail');
+        if (metricUptime && emulator) {
+            const uptime = this.currentStats.uptime;
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const seconds = uptime % 60;
+            metricUptime.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (uptimeDetail) {
+                uptimeDetail.textContent = `${uptime} seconds`;
+            }
+        }
+
+        // Update emulator state
+        const metricState = document.getElementById('metric-state');
+        const bootTimeElement = document.getElementById('boot-time');
+        const instructionsElement = document.getElementById('instructions-count');
+        
+        if (metricState && emulator) {
+            metricState.textContent = emulator.state.charAt(0).toUpperCase() + emulator.state.slice(1);
+        }
+        
+        if (bootTimeElement && emulator && emulator.bootTime) {
+            const bootDuration = Math.round((Date.now() - emulator.bootTime) / 1000);
+            bootTimeElement.textContent = `${bootDuration}s ago`;
+        } else if (bootTimeElement) {
+            bootTimeElement.textContent = 'N/A';
+        }
+        
+        if (instructionsElement && emulator && emulator.isRunning) {
+            // Simulate instruction count
+            instructionsElement.textContent = Math.floor(Math.random() * 1000000).toLocaleString();
+        } else if (instructionsElement) {
+            instructionsElement.textContent = '0';
+        }
+
         // Update charts
         this.updateCharts();
     }
@@ -187,6 +270,8 @@ class MetricsCollector {
         this.drawChart('memory-chart', this.metrics.memory, '#10b981');
         this.drawChart('fps-chart', this.metrics.fps, '#f59e0b');
         this.drawChart('network-chart', this.metrics.network, '#8b5cf6');
+        this.drawChart('disk-chart', this.metrics.disk, '#ec4899');
+        this.drawChart('packets-chart', this.metrics.packets, '#06b6d4');
     }
 
     drawChart(canvasId, data, color) {
@@ -272,7 +357,9 @@ class MetricsCollector {
                 cpu: this.metrics.cpu,
                 memory: this.metrics.memory,
                 fps: this.metrics.fps,
-                network: this.metrics.network
+                network: this.metrics.network,
+                disk: this.metrics.disk,
+                packets: this.metrics.packets
             },
             config: emulator ? emulator.config : null,
             logs: emulator && emulator.logger ? emulator.logger.getLogs() : []
@@ -282,7 +369,7 @@ class MetricsCollector {
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `saltaz-metrics-${Date.now()}.json`;
+        link.download = `slitaz-metrics-${Date.now()}.json`;
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);

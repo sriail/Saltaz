@@ -1,5 +1,5 @@
-// SalTaz v86 Emulator Core
-class SalTazEmulator {
+// SliTaz v86 Emulator Core
+class SliTazEmulator {
     constructor() {
         this.emulator = null;
         this.config = {
@@ -8,9 +8,9 @@ class SalTazEmulator {
             cpu_speed: 1,
             acpi: true,
             boot_order: 0x123, // CD-ROM, floppy, hard disk
-            // ISO configuration - can be customized via settings
-            cdrom_url: "https://boot2docker.github.io/boot2docker/boot2docker.iso",
-            cdrom_size: 45 * 1024 * 1024
+            // ISO configuration - SliTaz 4.0 core with Midori browser
+            cdrom_url: "https://download.tuxfamily.org/slitaz/iso/4.0/slitaz-4.0.iso",
+            cdrom_size: 35 * 1024 * 1024
         };
         this.state = 'initializing';
         this.logger = new EmulatorLogger();
@@ -18,6 +18,8 @@ class SalTazEmulator {
         this.isRunning = false;
         this.mouseLockedEnabled = false;
         this.networkAdapter = null;
+        this.startTime = null;
+        this.bootTime = null;
     }
 
     async initialize() {
@@ -125,9 +127,9 @@ class SalTazEmulator {
         `;
         
         demoDiv.innerHTML = `
-            <h2 style="margin-bottom: 1rem; font-size: 2rem;">SalTaz v86 Emulator</h2>
+            <h2 style="margin-bottom: 1rem; font-size: 2rem;">SliTaz v86 Emulator</h2>
             <p style="margin-bottom: 1.5rem; opacity: 0.9;">
-                This is a demonstration of the SalTaz v86-based Linux emulator interface.
+                This is a demonstration of the SliTaz v86-based Linux emulator interface.
             </p>
             <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
                 <h3 style="margin-bottom: 0.5rem;">Features Implemented:</h3>
@@ -194,7 +196,7 @@ class SalTazEmulator {
     }
 
     loadSettings() {
-        const savedSettings = localStorage.getItem('saltaz-settings');
+        const savedSettings = localStorage.getItem('slitaz-settings');
         if (savedSettings) {
             try {
                 const settings = JSON.parse(savedSettings);
@@ -230,6 +232,11 @@ class SalTazEmulator {
     start() {
         if (this.isRunning) return;
         
+        // Record start time
+        if (!this.startTime) {
+            this.startTime = Date.now();
+        }
+        
         // Handle demo mode
         if (this.state === 'demo') {
             this.logger.log('Starting demo mode...');
@@ -256,6 +263,7 @@ class SalTazEmulator {
             this.emulator.run();
             this.isRunning = true;
             this.state = 'running';
+            this.bootTime = Date.now();
             updateSystemState('Running');
             
             // Enable controls
@@ -313,12 +321,16 @@ class SalTazEmulator {
             
             screenContainer.requestPointerLock();
             this.mouseLockedEnabled = true;
-            document.getElementById('mouse-lock-btn').textContent = '🖱️ Unlock Mouse';
+            const btn = document.getElementById('mouse-lock-btn');
+            const btnText = btn.querySelector('span');
+            if (btnText) btnText.textContent = 'Unlock Mouse';
             this.logger.log('Mouse locked');
         } else {
             document.exitPointerLock();
             this.mouseLockedEnabled = false;
-            document.getElementById('mouse-lock-btn').textContent = '🖱️ Lock Mouse';
+            const btn = document.getElementById('mouse-lock-btn');
+            const btnText = btn.querySelector('span');
+            if (btnText) btnText.textContent = 'Lock Mouse';
             this.logger.log('Mouse unlocked');
         }
     }
@@ -332,7 +344,7 @@ class SalTazEmulator {
             
             // Download screenshot
             const link = document.createElement('a');
-            link.download = `saltaz-screenshot-${Date.now()}.png`;
+            link.download = `slitaz-screenshot-${Date.now()}.png`;
             link.href = canvas;
             link.click();
             
@@ -358,7 +370,10 @@ class SalTazEmulator {
         return {
             state: this.state,
             isRunning: this.isRunning,
-            config: this.config
+            config: this.config,
+            startTime: this.startTime,
+            bootTime: this.bootTime,
+            uptime: this.startTime ? Date.now() - this.startTime : 0
         };
     }
 }
@@ -423,7 +438,7 @@ class EmulatorLogger {
         const blob = new Blob([logsText], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `saltaz-logs-${Date.now()}.txt`;
+        link.download = `slitaz-logs-${Date.now()}.txt`;
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
@@ -457,7 +472,7 @@ class CrashReporter {
         
         // Store locally
         try {
-            localStorage.setItem('saltaz-crashes', JSON.stringify(this.crashes));
+            localStorage.setItem('slitaz-crashes', JSON.stringify(this.crashes));
         } catch (e) {
             console.error('Failed to save crash report:', e);
         }
@@ -470,7 +485,7 @@ class CrashReporter {
         const blob = new Blob([reportsText], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `saltaz-crash-reports-${Date.now()}.json`;
+        link.download = `slitaz-crash-reports-${Date.now()}.json`;
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
@@ -486,7 +501,7 @@ let emulator = null;
 
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', () => {
-    emulator = new SalTazEmulator();
+    emulator = new SliTazEmulator();
     emulator.initialize();
 });
 

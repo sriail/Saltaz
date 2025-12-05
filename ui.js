@@ -144,11 +144,11 @@ class UIController {
     }
 
     getStoredTheme() {
-        return localStorage.getItem('saltaz-theme');
+        return localStorage.getItem('slitaz-theme');
     }
 
     saveTheme(theme) {
-        localStorage.setItem('saltaz-theme', theme);
+        localStorage.setItem('slitaz-theme', theme);
     }
 
     detectBrowserTheme() {
@@ -182,10 +182,13 @@ class UIController {
         const mouseLockBtn = document.getElementById('mouse-lock-btn');
         if (!mouseLockBtn) return;
 
+        const btnText = mouseLockBtn.querySelector('span');
+        if (!btnText) return;
+
         if (document.pointerLockElement === document.getElementById('screen-container')) {
-            mouseLockBtn.querySelector('span').textContent = '🖱️ Unlock Mouse';
+            btnText.textContent = 'Unlock Mouse';
         } else {
-            mouseLockBtn.querySelector('span').textContent = '🖱️ Lock Mouse';
+            btnText.textContent = 'Lock Mouse';
         }
     }
 
@@ -217,7 +220,7 @@ class UIController {
     }
 
     loadCurrentSettings() {
-        const savedSettings = localStorage.getItem('saltaz-settings');
+        const savedSettings = localStorage.getItem('slitaz-settings');
         if (savedSettings) {
             try {
                 const settings = JSON.parse(savedSettings);
@@ -293,7 +296,7 @@ function saveSettings() {
         metricsLogging: document.getElementById('metrics-logging').checked
     };
 
-    localStorage.setItem('saltaz-settings', JSON.stringify(settings));
+    localStorage.setItem('slitaz-settings', JSON.stringify(settings));
 
     // Update emulator if running
     if (emulator) {
