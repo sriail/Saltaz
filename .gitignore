@@ -57,6 +57,6 @@ test-results/
 
 # v86 files (users should download these via setup.sh)
 lib/v86/bios/*.bin
-# Keep placeholder files but ignore actual large library files
-lib/v86/libv86-real.js
-lib/v86/v86-real.wasm
+# Downloaded library files (keep DOWNLOAD_REQUIRED.txt and v86.wasm.txt as placeholders)
+lib/v86/libv86.js
+lib/v86/v86.wasm

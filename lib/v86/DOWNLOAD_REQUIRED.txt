@@ -1,0 +1,21 @@
+/*
+ * v86 Library - Download Required
+ * 
+ * The v86 library files must be downloaded before the emulator can function.
+ * 
+ * Run the setup script:
+ *   npm run setup
+ * or
+ *   ./setup.sh
+ * 
+ * This will download:
+ *   - libv86.js (~327KB) - v86 JavaScript library
+ *   - v86.wasm (~2MB) - v86 WebAssembly module
+ *   - bios/seabios.bin (~128KB) - SeaBIOS
+ *   - bios/vgabios.bin (~32KB) - VGA BIOS
+ * 
+ * Files will be downloaded from:
+ * https://cdn.jsdelivr.net/npm/v86@10.7.0/build/
+ * 
+ * For manual download instructions, see README.md in this directory.
+ */

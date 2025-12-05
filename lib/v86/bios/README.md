@@ -25,15 +25,15 @@ If the automatic method fails, download the files manually:
 
 1. **SeaBIOS** (128KB):
    ```bash
-   curl -L -o lib/v86/bios/seabios.bin https://cdn.jsdelivr.net/npm/v86@latest/bios/seabios.bin
+   curl -L -o lib/v86/bios/seabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/seabios.bin
    ```
-   Or download from: https://cdn.jsdelivr.net/npm/v86@latest/bios/seabios.bin
+   Or download from: https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/seabios.bin
 
 2. **VGA BIOS** (32KB):
    ```bash
-   curl -L -o lib/v86/bios/vgabios.bin https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin
+   curl -L -o lib/v86/bios/vgabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/vgabios.bin
    ```
-   Or download from: https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin
+   Or download from: https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/vgabios.bin
 
 ### Alternative Sources
 

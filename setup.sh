@@ -17,22 +17,42 @@ mkdir -p lib/v86/bios
 # Download v86 library (browser-compatible version from CDN)
 echo "Downloading v86 library files..."
 
-if [ ! -f lib/v86/libv86.js ] || [ "$(wc -c < lib/v86/libv86.js)" -lt 100000 ]; then
+if [ -f lib/v86/libv86.js ]; then
+    FILE_SIZE=$(wc -c < lib/v86/libv86.js 2>/dev/null || echo "0")
+    if [ "$FILE_SIZE" -lt 100000 ]; then
+        DOWNLOAD_LIBV86=true
+    else
+        echo "libv86.js already exists"
+        DOWNLOAD_LIBV86=false
+    fi
+else
+    DOWNLOAD_LIBV86=true
+fi
+
+if [ "$DOWNLOAD_LIBV86" = true ]; then
     echo "Downloading libv86.js from CDN..."
     curl -L -o lib/v86/libv86.js https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js || \
     wget -O lib/v86/libv86.js https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js || \
     echo "Failed to download libv86.js - please download manually from: https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js"
-else
-    echo "libv86.js already exists"
 fi
 
-if [ ! -f lib/v86/v86.wasm ] || [ "$(wc -c < lib/v86/v86.wasm)" -lt 100000 ]; then
+if [ -f lib/v86/v86.wasm ]; then
+    FILE_SIZE=$(wc -c < lib/v86/v86.wasm 2>/dev/null || echo "0")
+    if [ "$FILE_SIZE" -lt 100000 ]; then
+        DOWNLOAD_WASM=true
+    else
+        echo "v86.wasm already exists"
+        DOWNLOAD_WASM=false
+    fi
+else
+    DOWNLOAD_WASM=true
+fi
+
+if [ "$DOWNLOAD_WASM" = true ]; then
     echo "Downloading v86.wasm..."
     curl -L -o lib/v86/v86.wasm https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm || \
     wget -O lib/v86/v86.wasm https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm || \
     echo "Failed to download v86.wasm - please download manually from: https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm"
-else
-    echo "v86.wasm already exists"
 fi
 
 # Download BIOS files

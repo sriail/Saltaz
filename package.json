@@ -23,7 +23,7 @@
   ],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "v86": "^0.5.292"
+  "devDependencies": {
+    "v86": "^10.7.0"
   }
 }
