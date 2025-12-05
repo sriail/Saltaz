@@ -42,6 +42,8 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 
 ### Installation
 
+**Important:** The v86 library files must be downloaded before the emulator can run.
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/sriail/Saltaz.git
@@ -53,12 +55,18 @@ cd Saltaz
 npm install
 ```
 
-3. Download v86 BIOS files (required):
+3. **Download v86 library and BIOS files (required):**
 ```bash
 npm run setup
 # or
 ./setup.sh
 ```
+
+This downloads:
+- `lib/v86/libv86.js` - v86 JavaScript library (~327KB)
+- `lib/v86/v86.wasm` - v86 WebAssembly module (~2MB)
+- `lib/v86/bios/seabios.bin` - SeaBIOS (~128KB)
+- `lib/v86/bios/vgabios.bin` - VGA BIOS (~32KB)
 
 4. Serve the files using any web server:
 ```bash
@@ -78,6 +86,20 @@ php -S localhost:8000
 5. Open your browser and navigate to:
 ```
 http://localhost:8000
+```
+
+### Manual Download
+
+If the setup script fails, download the files manually:
+
+```bash
+# v86 library
+curl -L -o lib/v86/libv86.js https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js
+curl -L -o lib/v86/v86.wasm https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm
+
+# BIOS files  
+curl -L -o lib/v86/bios/seabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/seabios.bin
+curl -L -o lib/v86/bios/vgabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/vgabios.bin
 ```
 
 ### Quick Start

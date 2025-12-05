@@ -55,5 +55,8 @@ test-results/
 *.bak
 *.backup
 
-# v86 BIOS files (users should download these via setup.sh)
+# v86 files (users should download these via setup.sh)
 lib/v86/bios/*.bin
+# Keep placeholder files but ignore actual large library files
+lib/v86/libv86-real.js
+lib/v86/v86-real.wasm

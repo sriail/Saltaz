@@ -1,0 +1,15 @@
+# v86 WebAssembly Module Placeholder
+
+This file needs to be downloaded. Please run:
+```
+npm run setup
+```
+or
+```
+./setup.sh
+```
+
+This will download the v86 WASM module from:
+https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm
+
+Alternatively, download manually and place in this location.
