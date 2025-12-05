@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalTaz - v86 Linux Emulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">SalTaz</h1>
+                <span class="version">v86 Linux Emulator</span>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+                    <svg class="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m6-12v6m0 6v6M6 1v6m0 6v6"></path>
+                    </svg>
+                </button>
+                <button id="metrics-btn" class="icon-btn" title="Metrics">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"></path>
+                        <polyline points="7 14 12 9 16 13 21 8"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <button id="start-btn" class="action-btn primary" disabled>
+                    <span class="btn-icon">▶</span>
+                    <span>Start Emulator</span>
+                </button>
+                
+                <div class="status-panel">
+                    <h3>System Status</h3>
+                    <div class="status-item">
+                        <span class="status-label">State:</span>
+                        <span id="system-state" class="status-value">Initializing...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">CPU:</span>
+                        <span id="cpu-usage" class="status-value">0%</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Memory:</span>
+                        <span id="memory-usage" class="status-value">0 MB</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">FPS:</span>
+                        <span id="fps-counter" class="status-value">0</span>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <h3>Quick Actions</h3>
+                    <button id="mouse-lock-btn" class="action-btn" disabled>
+                        <span>🖱️ Lock Mouse</span>
+                    </button>
+                    <button id="fullscreen-btn" class="action-btn">
+                        <span>⛶ Fullscreen</span>
+                    </button>
+                    <button id="screenshot-btn" class="action-btn" disabled>
+                        <span>📷 Screenshot</span>
+                    </button>
+                    <button id="reset-btn" class="action-btn danger" disabled>
+                        <span>🔄 Reset</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Emulator Display -->
+            <main class="emulator-container">
+                <div id="loading-screen" class="loading-screen">
+                    <div class="loading-content">
+                        <div class="spinner"></div>
+                        <h2>Loading SalTaz Emulator</h2>
+                        <p id="loading-status">Initializing v86...</p>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="loading-details" class="loading-details"></p>
+                    </div>
+                </div>
+                
+                <div id="screen-container" class="screen-container">
+                    <div id="screen"></div>
+                    <canvas id="vga-canvas"></canvas>
+                </div>
+
+                <div id="console-container" class="console-container hidden">
+                    <div class="console-header">
+                        <span>Backend Console</span>
+                        <button id="console-close" class="close-btn">×</button>
+                    </div>
+                    <pre id="console-output"></pre>
+                </div>
+            </main>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="close-btn" onclick="closeSettings()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <h3>Resource Allocation</h3>
+                        <div class="setting-item">
+                            <label for="memory-size">Memory (MB):</label>
+                            <input type="range" id="memory-size" min="128" max="1024" value="512" step="64">
+                            <span id="memory-value">512 MB</span>
+                        </div>
+                        <div class="setting-item">
+                            <label for="vga-memory">VGA Memory (MB):</label>
+                            <input type="range" id="vga-memory" min="2" max="64" value="8" step="2">
+                            <span id="vga-memory-value">8 MB</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>Performance</h3>
+                        <div class="setting-item">
+                            <label for="cpu-speed">CPU Speed:</label>
+                            <select id="cpu-speed">
+                                <option value="0.5">50%</option>
+                                <option value="1" selected>100%</option>
+                                <option value="2">200%</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="acpi-enable" checked>
+                                Enable ACPI
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Storage</h3>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="local-storage-enable">
+                                Enable Local Storage (Advanced)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Logging</h3>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="crash-reporting" checked>
+                                Enable Crash Reporting
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="metrics-logging" checked>
+                                Enable Metrics Logging
+                            </label>
+                        </div>
+                        <button id="export-logs-btn" class="action-btn">Export Logs</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="action-btn" onclick="closeSettings()">Cancel</button>
+                    <button class="action-btn primary" onclick="saveSettings()">Save & Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Modal -->
+        <div id="metrics-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>System Metrics</h2>
+                    <button class="close-btn" onclick="closeMetrics()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>CPU Usage</h4>
+                            <div class="metric-value" id="metric-cpu">0%</div>
+                            <canvas id="cpu-chart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Memory Usage</h4>
+                            <div class="metric-value" id="metric-memory">0 MB</div>
+                            <canvas id="memory-chart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Frame Rate</h4>
+                            <div class="metric-value" id="metric-fps">0 FPS</div>
+                            <canvas id="fps-chart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Network I/O</h4>
+                            <div class="metric-value" id="metric-network">0 KB/s</div>
+                            <canvas id="network-chart" width="200" height="100"></canvas>
+                        </div>
+                    </div>
+                    <div class="log-viewer">
+                        <h3>Event Log</h3>
+                        <pre id="event-log"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="action-btn" onclick="exportMetrics()">Export Metrics</button>
+                    <button class="action-btn primary" onclick="closeMetrics()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Fallback for v86 library
+        window.V86_AVAILABLE = false;
+        window.addEventListener('load', () => {
+            if (typeof V86Starter !== 'undefined') {
+                window.V86_AVAILABLE = true;
+            }
+        });
+    </script>
+    <!-- 
+        Note: Using @latest for v86. For production, consider pinning to a specific version.
+        Example: https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js
+        See DEPLOYMENT.md for self-hosting instructions.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js" onerror="console.warn('v86 library not available, using demo mode')"></script>
+    <script src="emulator.js"></script>
+    <script src="ui.js"></script>
+    <script src="metrics.js"></script>
+</body>
+</html>
