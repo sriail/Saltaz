@@ -283,17 +283,16 @@
         });
     </script>
     <!-- 
-        Note: Using @latest for v86. For production, consider pinning to a specific version.
-        Example: https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js
-        See DEPLOYMENT.md for self-hosting instructions.
+        v86 library is now bundled locally in lib/v86/
+        This allows the emulator to run completely offline without CDN dependencies.
         
-        If v86 fails to load (blocked by ad blockers), the app will run in demo mode.
-        To test with actual SliTaz 4.0:
-        1. Disable ad blockers/content blockers for this site
-        2. Or download v86 library locally and update script src
-        3. The ISO is configured to: https://download.tuxfamily.org/slitaz/iso/4.0/slitaz-4.0.iso
+        If v86 fails to load, the app will run in demo mode showing the interface.
+        To run the full emulator:
+        1. Ensure BIOS files are in lib/v86/bios/ (run ./setup.sh to download)
+        2. The ISO is configured to: https://download.tuxfamily.org/slitaz/iso/4.0/slitaz-4.0.iso
+        3. For offline use, download the ISO and update cdrom_url in emulator.js
     -->
-    <script src="https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js" onerror="console.warn('v86 library not available, using demo mode')"></script>
+    <script src="lib/v86/libv86.js" onerror="console.warn('v86 library not available, using demo mode')"></script>
     <script src="emulator.js"></script>
     <script src="ui.js"></script>
     <script src="metrics.js"></script>

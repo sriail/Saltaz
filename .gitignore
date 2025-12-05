@@ -3,6 +3,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
 
 # Build outputs
 dist/
@@ -53,3 +54,9 @@ test-results/
 # Backup files
 *.bak
 *.backup
+
+# v86 files (users should download these via setup.sh)
+lib/v86/bios/*.bin
+# Downloaded library files (keep DOWNLOAD_REQUIRED.txt and v86.wasm.txt as placeholders)
+lib/v86/libv86.js
+lib/v86/v86.wasm

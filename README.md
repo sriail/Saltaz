@@ -6,6 +6,7 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 
 ### Core Functionality
 - ✅ **Browser-based Emulation**: Runs entirely in the browser using v86 and WebAssembly
+- ✅ **Local v86 Integration**: v86 emulator is bundled locally, no CDN dependencies
 - ✅ **SliTaz 4.0 Core**: Pre-configured with SliTaz 4.0 ISO featuring Midori browser
 - ✅ **Terminal Support**: Full terminal access for command-line operations
 - ✅ **Pre-installed Applications**: Browser (Midori), Notepad, Settings, and base utilities
@@ -41,27 +42,64 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 
 ### Installation
 
+**Important:** The v86 library files must be downloaded before the emulator can run.
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/sriail/Saltaz.git
 cd Saltaz
 ```
 
-2. Serve the files using any web server:
+2. Install dependencies:
 ```bash
-# Using Python 3
+npm install
+```
+
+3. **Download v86 library and BIOS files (required):**
+```bash
+npm run setup
+# or
+./setup.sh
+```
+
+This downloads:
+- `lib/v86/libv86.js` - v86 JavaScript library (~327KB)
+- `lib/v86/v86.wasm` - v86 WebAssembly module (~2MB)
+- `lib/v86/bios/seabios.bin` - SeaBIOS (~128KB)
+- `lib/v86/bios/vgabios.bin` - VGA BIOS (~32KB)
+
+4. Serve the files using any web server:
+```bash
+# Using npm
+npm start
+
+# Or using Python 3
 python -m http.server 8000
 
-# Using Node.js http-server
+# Or using Node.js http-server
 npx http-server -p 8000
 
-# Using PHP
+# Or using PHP
 php -S localhost:8000
 ```
 
-3. Open your browser and navigate to:
+5. Open your browser and navigate to:
 ```
 http://localhost:8000
+```
+
+### Manual Download
+
+If the setup script fails, download the files manually:
+
+```bash
+# v86 library
+curl -L -o lib/v86/libv86.js https://cdn.jsdelivr.net/npm/v86@10.7.0/build/libv86.js
+curl -L -o lib/v86/v86.wasm https://cdn.jsdelivr.net/npm/v86@10.7.0/build/v86.wasm
+
+# BIOS files  
+curl -L -o lib/v86/bios/seabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/seabios.bin
+curl -L -o lib/v86/bios/vgabios.bin https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/vgabios.bin
 ```
 
 ### Quick Start

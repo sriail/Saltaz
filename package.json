@@ -1,0 +1,29 @@
+{
+  "name": "siltaz",
+  "version": "1.0.0",
+  "description": "A modern, lightweight browser-based Linux emulator powered by v86, providing a seamless experience for running SliTaz 4.0 (core edition with Midori browser) directly in your web browser.",
+  "main": "emulator.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "setup": "bash setup.sh",
+    "start": "npx http-server -p 8000",
+    "dev": "npx http-server -p 8000 -o",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "v86",
+    "emulator",
+    "linux",
+    "slitaz",
+    "browser",
+    "wasm",
+    "x86"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "v86": "^10.7.0"
+  }
+}

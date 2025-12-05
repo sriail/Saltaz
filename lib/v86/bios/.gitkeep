@@ -1,0 +1,7 @@
+IMPORTANT: BIOS files are required but not included in the repository.
+
+Please run ./setup.sh to download them automatically, or download manually:
+- SeaBIOS: https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/seabios.bin
+- VGA BIOS: https://cdn.jsdelivr.net/npm/v86@10.7.0/bios/vgabios.bin
+
+See README.md in this directory for more information.
