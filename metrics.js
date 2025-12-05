@@ -30,6 +30,9 @@ class MetricsCollector {
         this.CHART_GRID_COLOR = 'rgba(128, 128, 128, 0.2)';
         this.CHART_LINE_WIDTH = 2;
         this.CHART_GRID_LINES = 4;
+        
+        // Simulation constants
+        this.MAX_SIMULATED_INSTRUCTIONS = 1000000;
     }
 
     start() {
@@ -192,6 +195,13 @@ class MetricsCollector {
         }
     }
 
+    formatTimeDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
     updateMetricsModal() {
         // Update metric values
         const metricCPU = document.getElementById('metric-cpu');
@@ -229,10 +239,7 @@ class MetricsCollector {
         const uptimeDetail = document.getElementById('uptime-detail');
         if (metricUptime && emulator) {
             const uptime = this.currentStats.uptime;
-            const hours = Math.floor(uptime / 3600);
-            const minutes = Math.floor((uptime % 3600) / 60);
-            const seconds = uptime % 60;
-            metricUptime.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            metricUptime.textContent = this.formatTimeDuration(uptime);
             if (uptimeDetail) {
                 uptimeDetail.textContent = `${uptime} seconds`;
             }
@@ -256,7 +263,7 @@ class MetricsCollector {
         
         if (instructionsElement && emulator && emulator.isRunning) {
             // Simulate instruction count
-            instructionsElement.textContent = Math.floor(Math.random() * 1000000).toLocaleString();
+            instructionsElement.textContent = Math.floor(Math.random() * this.MAX_SIMULATED_INSTRUCTIONS).toLocaleString();
         } else if (instructionsElement) {
             instructionsElement.textContent = '0';
         }

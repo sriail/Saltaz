@@ -183,7 +183,10 @@ class UIController {
         if (!mouseLockBtn) return;
 
         const btnText = mouseLockBtn.querySelector('span');
-        if (!btnText) return;
+        if (!btnText) {
+            console.warn('Mouse lock button text element not found');
+            return;
+        }
 
         if (document.pointerLockElement === document.getElementById('screen-container')) {
             btnText.textContent = 'Unlock Mouse';
