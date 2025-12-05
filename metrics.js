@@ -19,6 +19,12 @@ class MetricsCollector {
         this.lastNetworkBytes = 0;
         this.fpsCounter = 0;
         this.lastFpsTime = Date.now();
+        
+        // Chart rendering constants
+        this.CHART_FILL_OPACITY = '20';
+        this.CHART_GRID_COLOR = 'rgba(128, 128, 128, 0.2)';
+        this.CHART_LINE_WIDTH = 2;
+        this.CHART_GRID_LINES = 4;
     }
 
     start() {
@@ -200,11 +206,11 @@ class MetricsCollector {
         const maxValue = Math.max(...data, 1);
 
         // Draw grid lines
-        ctx.strokeStyle = 'rgba(128, 128, 128, 0.2)';
+        ctx.strokeStyle = this.CHART_GRID_COLOR;
         ctx.lineWidth = 1;
         
-        for (let i = 0; i <= 4; i++) {
-            const y = (height / 4) * i;
+        for (let i = 0; i <= this.CHART_GRID_LINES; i++) {
+            const y = (height / this.CHART_GRID_LINES) * i;
             ctx.beginPath();
             ctx.moveTo(0, y);
             ctx.lineTo(width, y);
@@ -213,7 +219,7 @@ class MetricsCollector {
 
         // Draw data line
         ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = this.CHART_LINE_WIDTH;
         ctx.beginPath();
 
         const pointSpacing = width / (this.maxDataPoints - 1);
@@ -235,7 +241,7 @@ class MetricsCollector {
         ctx.lineTo(width, height);
         ctx.lineTo(0, height);
         ctx.closePath();
-        ctx.fillStyle = color + '20';
+        ctx.fillStyle = color + this.CHART_FILL_OPACITY;
         ctx.fill();
     }
 

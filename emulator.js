@@ -7,7 +7,10 @@ class SalTazEmulator {
             vga_memory_size: 8 * 1024 * 1024, // 8MB default
             cpu_speed: 1,
             acpi: true,
-            boot_order: 0x123 // CD-ROM, floppy, hard disk
+            boot_order: 0x123, // CD-ROM, floppy, hard disk
+            // ISO configuration - can be customized via settings
+            cdrom_url: "https://boot2docker.github.io/boot2docker/boot2docker.iso",
+            cdrom_size: 45 * 1024 * 1024
         };
         this.state = 'initializing';
         this.logger = new EmulatorLogger();
@@ -61,9 +64,9 @@ class SalTazEmulator {
                     url: "https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin",
                 },
                 cdrom: {
-                    url: "https://boot2docker.github.io/boot2docker/boot2docker.iso",
+                    url: this.config.cdrom_url,
                     async: true,
-                    size: 45 * 1024 * 1024
+                    size: this.config.cdrom_size
                 },
                 autostart: false,
                 acpi: this.config.acpi,
@@ -199,6 +202,15 @@ class SalTazEmulator {
                 this.config.vga_memory_size = (settings.vgaMemory || 8) * 1024 * 1024;
                 this.config.cpu_speed = settings.cpuSpeed || 1;
                 this.config.acpi = settings.acpi !== false;
+                
+                // Load custom ISO URL if provided
+                if (settings.cdromUrl) {
+                    this.config.cdrom_url = settings.cdromUrl;
+                }
+                if (settings.cdromSize) {
+                    this.config.cdrom_size = settings.cdromSize;
+                }
+                
                 this.logger.log('Settings loaded from localStorage');
             } catch (e) {
                 this.logger.error('Failed to load settings:', e);
@@ -250,7 +262,9 @@ class SalTazEmulator {
             document.getElementById('mouse-lock-btn').disabled = false;
             document.getElementById('screenshot-btn').disabled = false;
             document.getElementById('reset-btn').disabled = false;
-            document.getElementById('start-btn').textContent = 'Pause';
+            const startBtn = document.getElementById('start-btn');
+            const btnText = startBtn.querySelector('span:last-child');
+            btnText.textContent = 'Pause';
             
             this.logger.log('Emulator started');
         } catch (error) {
