@@ -10,7 +10,26 @@ git clone https://github.com/sriail/Saltaz.git
 cd Saltaz
 ```
 
-2. **Start a local web server:**
+2. **Install dependencies:**
+```bash
+npm install
+```
+
+3. **Download v86 BIOS files:**
+```bash
+npm run setup
+# or
+./setup.sh
+```
+
+This will download the required BIOS files (seabios.bin and vgabios.bin) to `lib/v86/bios/`.
+
+4. **Start a local web server:**
+
+Using npm:
+```bash
+npm start
+```
 
 Using Python 3:
 ```bash
@@ -27,7 +46,7 @@ Using PHP:
 php -S localhost:8000
 ```
 
-3. **Open in browser:**
+5. **Open in browser:**
 ```
 http://localhost:8000
 ```
@@ -64,46 +83,64 @@ Deploy to any static hosting service:
 
 ### CDN Integration
 
-The application uses CDN for v86 library:
+The application now uses locally bundled v86 library files instead of CDN:
 ```
-https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js
-https://cdn.jsdelivr.net/npm/v86@latest/build/v86.wasm
+lib/v86/libv86.js     - v86 JavaScript library
+lib/v86/v86.wasm      - v86 WebAssembly module
+lib/v86/bios/         - BIOS files (downloaded via setup.sh)
 ```
 
-For production, consider:
-1. Self-hosting v86 files for better reliability
-2. Using a specific version instead of `@latest`
+This provides several advantages:
+1. Works completely offline (after initial ISO download)
+2. No external dependencies or CDN failures
+3. Faster loading times
+4. Better reliability
+
+### BIOS Files
+
+The v86 emulator requires BIOS files to function. These are not included in the repository due to size and licensing considerations, but can be easily downloaded:
+
+**Automatic download (recommended):**
+```bash
+npm run setup
+# or
+./setup.sh
+```
+
+**Manual download:**
+```bash
+curl -L -o lib/v86/bios/seabios.bin https://cdn.jsdelivr.net/npm/v86@latest/bios/seabios.bin
+curl -L -o lib/v86/bios/vgabios.bin https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin
+```
+
+The files should be placed in `lib/v86/bios/`:
+- `seabios.bin` (~128KB)
+- `vgabios.bin` (~32KB)
 
 ### Self-Hosting v86
 
-To self-host v86 library:
+v86 is now bundled locally in the `lib/v86/` directory. The repository includes:
+- `lib/v86/libv86.js` - Main v86 library
+- `lib/v86/v86.wasm` - WebAssembly module
 
-1. **Download v86 files:**
+The BIOS files are downloaded separately via the setup script to keep the repository size small.
+
+If you need to update v86 to a different version:
+
+1. **Install specific version via npm:**
 ```bash
-wget https://cdn.jsdelivr.net/npm/v86@latest/build/libv86.js
-wget https://cdn.jsdelivr.net/npm/v86@latest/build/v86.wasm
-mkdir -p bios
-wget -P bios https://cdn.jsdelivr.net/npm/v86@latest/bios/seabios.bin
-wget -P bios https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin
+npm install v86@10.7.0
 ```
 
-2. **Update index.html:**
-```html
-<script src="libv86.js"></script>
+2. **Copy files to lib directory:**
+```bash
+cp node_modules/v86/build/libv86.js lib/v86/
+cp node_modules/v86/build/v86.wasm lib/v86/
 ```
 
-3. **Update emulator.js:**
-```javascript
-const v86Config = {
-    wasm_path: "v86.wasm",
-    bios: {
-        url: "bios/seabios.bin",
-    },
-    vga_bios: {
-        url: "bios/vgabios.bin",
-    },
-    // ... rest of config
-};
+3. **Download BIOS files:**
+```bash
+npm run setup
 ```
 
 ## Custom ISO Image

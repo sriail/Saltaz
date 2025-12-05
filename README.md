@@ -6,6 +6,7 @@ A modern, lightweight browser-based Linux emulator powered by v86, providing a s
 
 ### Core Functionality
 - ✅ **Browser-based Emulation**: Runs entirely in the browser using v86 and WebAssembly
+- ✅ **Local v86 Integration**: v86 emulator is bundled locally, no CDN dependencies
 - ✅ **SliTaz 4.0 Core**: Pre-configured with SliTaz 4.0 ISO featuring Midori browser
 - ✅ **Terminal Support**: Full terminal access for command-line operations
 - ✅ **Pre-installed Applications**: Browser (Midori), Notepad, Settings, and base utilities
@@ -47,19 +48,34 @@ git clone https://github.com/sriail/Saltaz.git
 cd Saltaz
 ```
 
-2. Serve the files using any web server:
+2. Install dependencies:
 ```bash
-# Using Python 3
+npm install
+```
+
+3. Download v86 BIOS files (required):
+```bash
+npm run setup
+# or
+./setup.sh
+```
+
+4. Serve the files using any web server:
+```bash
+# Using npm
+npm start
+
+# Or using Python 3
 python -m http.server 8000
 
-# Using Node.js http-server
+# Or using Node.js http-server
 npx http-server -p 8000
 
-# Using PHP
+# Or using PHP
 php -S localhost:8000
 ```
 
-3. Open your browser and navigate to:
+5. Open your browser and navigate to:
 ```
 http://localhost:8000
 ```

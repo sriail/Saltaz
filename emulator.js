@@ -53,17 +53,17 @@ class SliTazEmulator {
             // Create network adapter for host routing
             this.networkAdapter = this.createNetworkAdapter();
 
-            // Configure v86
+            // Configure v86 - using local files instead of CDN
             const v86Config = {
-                wasm_path: "https://cdn.jsdelivr.net/npm/v86@latest/build/v86.wasm",
+                wasm_path: "lib/v86/v86.wasm",
                 memory_size: this.config.memory_size,
                 vga_memory_size: this.config.vga_memory_size,
                 screen_container: document.getElementById("screen"),
                 bios: {
-                    url: "https://cdn.jsdelivr.net/npm/v86@latest/bios/seabios.bin",
+                    url: "lib/v86/bios/seabios.bin",
                 },
                 vga_bios: {
-                    url: "https://cdn.jsdelivr.net/npm/v86@latest/bios/vgabios.bin",
+                    url: "lib/v86/bios/vgabios.bin",
                 },
                 cdrom: {
                     url: this.config.cdrom_url,
